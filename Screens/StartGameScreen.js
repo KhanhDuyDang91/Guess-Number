@@ -14,6 +14,8 @@ import Card from "../components/Card";
 import Colors from "../constants/Colors";
 import Input from "../components/Input";
 import NumberContainer from "../components/NumberContainer";
+import TitleText from "../components/TitleText";
+import BodyText from "../components/BodyText";
 
 const StartGameScreen = (props) => {
   const [enteredValue, setEnterdValue] = useState("");
@@ -48,11 +50,11 @@ const StartGameScreen = (props) => {
   if (confirmed) {
     confirmedOutput = (
       <Card style={styles.summaryContainer}>
-        <Text>You selected</Text>
+        <BodyText>You selected</BodyText>
         <NumberContainer>{selectedNumber}</NumberContainer>
         <Button
           title="START GAME"
-          color={Colors.primary}
+          color={Colors.accent}
           onPress={() => props.onStartGame(selectedNumber)}
         />
       </Card>
@@ -66,9 +68,9 @@ const StartGameScreen = (props) => {
       }}
     >
       <View style={styles.screen}>
-        <Text style={styles.title}>Start a New Game!</Text>
+        <TitleText style={styles.title}>Start a New Game!</TitleText>
         <Card style={styles.inputContainer}>
-          <Text>Select a Number</Text>
+          <BodyText>Select a Number</BodyText>
           <Input
             style={styles.textInput}
             blurOnSubmit
@@ -83,14 +85,14 @@ const StartGameScreen = (props) => {
             <View style={styles.button}>
               <Button
                 title="RESET"
-                color={Colors.accent}
+                color={Colors.primary}
                 onPress={resetInputHandler}
               />
             </View>
             <View style={styles.button}>
               <Button
                 title="CONFIRM"
-                color={Colors.primary}
+                color={Colors.accent}
                 onPress={confirmInputHandler}
               />
             </View>
@@ -109,9 +111,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontSize: 20,
     marginVertical: 10,
-    fontFamily: "open-sans-bold",
   },
   inputContainer: {
     width: 300,

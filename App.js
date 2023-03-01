@@ -17,6 +17,7 @@ export default function App() {
 
   const [fontsLoaded] = useFonts({
     "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
+    "open-sans": require("./assets/fonts/OpenSans-Regular.ttf"),
   });
 
   useEffect(() => {
