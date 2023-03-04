@@ -12,7 +12,7 @@ const GameOverScreen = (props) => {
       <TitleText>The Game is Over!</TitleText>
       <View style={styles.imageContainer}>
         <Image
-          source={require("../assets/dzo.jpg")}
+          source={require("../assets/Phuc.jpg")}
           style={styles.image}
           resizeMode="cover"
         />
