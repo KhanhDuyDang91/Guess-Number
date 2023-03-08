@@ -10,6 +10,7 @@ import {
   Dimensions,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import * as ScreenOrientation from "expo-screen-orientation";
 
 import NumberContainer from "../components/NumberContainer";
 import Card from "../components/Card";
@@ -37,13 +38,30 @@ const renderListItem = (listLength, itemData) => (
 );
 
 const GameScreen = (props) => {
+  /* ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT); */
   const initialGuess = generateRandomBetween(1, 100, props.userChoice);
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
 
   const [pastGuesses, setPastGuesses] = useState([initialGuess.toString()]);
+  const [availableDeviceWidth, setAvailableDeviceWidth] = useState(
+    Dimensions.get("window").width
+  );
+  const [availableDeviceHeight, setAvailableDeviceHeight] = useState(
+    Dimensions.get("window").height
+  );
   const currentLow = useRef(1);
   const currentHigh = useRef(100);
   const { userChoice, onGameOver } = props;
+
+  useEffect(() => {
+    const updateLayout = () => {
+      setAvailableDeviceWidth(Dimensions.get("window").width);
+      setAvailableDeviceHeight(Dimensions.get("window").height);
+    };
+
+    Dimensions.addEventListener("change", updateLayout);
+    return () => {};
+  });
 
   useEffect(() => {
     if (currentGuess === userChoice) {
@@ -78,6 +96,46 @@ const GameScreen = (props) => {
       ...curPastGuesses,
     ]);
   };
+
+  if (Dimensions.get("window").height < 500) {
+    return (
+      <View style={styles.screen}>
+        <TitleText style={styles.title}>Opponent's Guess</TitleText>
+
+        <View style={styles.controls}>
+          <MainButton onPress={nextGuessHandler.bind(this, "lower")}>
+            <Ionicons
+              name="caret-down-circle-outline"
+              size={24}
+              color="white"
+            />
+          </MainButton>
+          <NumberContainer>{currentGuess}</NumberContainer>
+          <MainButton
+            onPress={nextGuessHandler.bind(this, "greater")}
+            style={styles.Secondary}
+          >
+            <Ionicons name="caret-up-circle-outline" size={24} color="white" />
+          </MainButton>
+        </View>
+
+        <View style={styles.listContainer}>
+          {/* <ScrollView>
+          {pastGuesses.map((guess, index) =>
+            renderListItem(guess, pastGuesses.length - index)
+          )}
+        </ScrollView> */}
+          <TitleText style={styles.titleItem}>History Guess</TitleText>
+          <FlatList
+            keyExtractor={(item) => item}
+            data={pastGuesses}
+            renderItem={renderListItem.bind(this, pastGuesses.length)}
+            contentContainerStyle={styles.list}
+          />
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.screen}>
@@ -158,6 +216,12 @@ const styles = StyleSheet.create({
   titleItem: {
     textAlign: "center",
     marginVertical: 10,
+  },
+  controls: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    width: "70%",
   },
 });
 
