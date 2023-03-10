@@ -8,6 +8,7 @@ import {
   Dimensions,
   ScrollView,
 } from "react-native";
+import * as ScreenOrientation from "expo-screen-orientation";
 
 import TitleText from "../components/TitleText";
 import BodyText from "../components/BodyText";
@@ -15,11 +16,33 @@ import Colors from "../constants/Colors";
 import MainButton from "../components/MainButton";
 
 const GameOverScreen = (props) => {
+  const [imageWidth, setImageWidth] = useState(
+    Dimensions.get("window").width * 0.6
+  );
+
+  useEffect(() => {
+    const updateLayout = () => {
+      setImageWidth(Dimensions.get("window").width * 0.6);
+    };
+
+    Dimensions.addEventListener("change", updateLayout);
+    return () => {};
+  });
+
   return (
     <ScrollView>
       <View style={styles.screen}>
-        <TitleText>The Game is Over!</TitleText>
-        <View style={styles.imageContainer}>
+        <TitleText style={{ fontSize: 30, color: "red" }}>
+          The Game is Over!
+        </TitleText>
+        <View
+          style={{
+            ...styles.imageContainer,
+            width: imageWidth,
+            height: imageWidth,
+            borderRadius: imageWidth / 2,
+          }}
+        >
           <Image
             source={require("../assets/Phuc.jpg")}
             style={styles.image}
@@ -48,9 +71,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   imageContainer: {
-    width: Dimensions.get("window").width * 0.6,
-    height: Dimensions.get("window").width * 0.6,
-    borderRadius: (Dimensions.get("window").width * 0.6) / 2,
     borderWidth: 3,
     borderColor: "black",
     overflow: "hidden",
